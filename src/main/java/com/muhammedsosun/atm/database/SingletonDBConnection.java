@@ -9,6 +9,7 @@ public class SingletonDBConnection {
 
     // private static final String URL = "jdbc:h2:./h2db/blog" + "AUTO_SERVER=TRUE";
     private static final String URL = "jdbc:h2:./h2db/user_management";
+    //private static final String URL = "jdbc:h2:~/h2db/user_management"; //kök dizin
     private static final String USERNAME ="sa";
     private static final String PASSWORD="";
 

@@ -11,7 +11,7 @@ public interface IDaoImplements<T>{
     Optional<T> create(T t);
 
     //LIST
-    List<T> list();
+    Optional<List<T>> list();
 
     //FIND
     Optional<T> findByName(String name);
