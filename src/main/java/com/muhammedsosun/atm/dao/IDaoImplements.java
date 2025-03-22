@@ -1,5 +1,7 @@
 package com.muhammedsosun.atm.dao;
 
+import com.muhammedsosun.atm.database.SingletonDBConnection;
+
 import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +24,7 @@ public interface IDaoImplements<T>{
     Optional<T> delete(int id);
 
     default Connection iDaoImplementsDatabaseConnection(){
-        return null;
+        return SingletonDBConnection.getInstance().getConnection();
     }
 
 }
