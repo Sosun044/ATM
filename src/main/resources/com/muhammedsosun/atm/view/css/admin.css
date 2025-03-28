@@ -1,0 +1,56 @@
+.panel-left, .panel-right {
+    -fx-padding: 15px;
+}
+
+.panel-title {
+    -fx-font-size: 18px;
+    -fx-text-fill: #333;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10 0;
+}
+
+.input-field, .combo-box {
+    -fx-padding: 6;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #ccc;
+    -fx-background-color: #fff;
+}
+
+.data-table {
+    -fx-border-color: #ccc;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-table-cell-border-color: transparent;
+    -fx-selection-bar: #e0e0e0;
+}
+
+.action-btn {
+    -fx-background-radius: 6;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-pref-width: 100;
+}
+
+.action-btn.green {
+    -fx-background-color: #28a745;
+}
+
+.action-btn.blue {
+    -fx-background-color: #007bff;
+}
+
+.action-btn.red {
+    -fx-background-color: #dc3545;
+}
+
+.utility-btn {
+    -fx-background-color: #6c757d;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+}
+
+.utility-btn.logout {
+    -fx-background-color: #343a40;
+}

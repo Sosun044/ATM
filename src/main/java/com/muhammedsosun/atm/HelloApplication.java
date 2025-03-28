@@ -1,6 +1,6 @@
 package com.muhammedsosun.atm;
 
-import com.muhammedsosun.atm.database.SingletonDBConnection;
+import com.muhammedsosun.atm.database.SingletonPropertiesDBConnection;
 import com.muhammedsosun.atm.utils.SpecialColor;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -44,7 +44,7 @@ public class HelloApplication extends Application {
     // Database Başlangıçtaki değeri
     private void initializeDatabase() {
         try {
-            Connection conn = SingletonDBConnection.getInstance().getConnection(); // STATIC BAĞLANTI ALINDI
+            Connection conn = SingletonPropertiesDBConnection.getInstance().getConnection(); // STATIC BAĞLANTI ALINDI
             Statement stmt = conn.createStatement();
 
             String createTableSQL = """

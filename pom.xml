@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.hamitmizrak</groupId>
-    <artifactId>ATM</artifactId>
+    <artifactId>ibb_ecodation_javafx</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>ATM</name>
+    <name>ibb_ecodation_javafx</name>
 
     <url/>
     <licenses>
@@ -15,6 +15,7 @@
     </licenses>
     <developers>
         <developer></developer>
+        <!--MSc Hamit Mizrak-->
     </developers>
     <scm>
         <connection/>
@@ -31,6 +32,7 @@
     <!--<packaging>war</packaging>-->
     <packaging>jar</packaging>
 
+    <!--Dikkat: JavaFX JDK 17 istiyor 27-03-2025-->
     <properties>
         <encoding>UTF-8</encoding>
         <java.version>17</java.version>
@@ -50,6 +52,27 @@
 
     <!-- start dependencies-->
     <dependencies>
+
+        <!--PDF-->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.29</version>
+        </dependency>
+
+        <!--EXCEL-->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.3</version>
+        </dependency>
+
+        <!-- Hashing Password-->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
 
         <!-- DATABASE -->
         <!-- RDBMS H2DB-->
@@ -182,6 +205,7 @@
         </dependency>
     </dependencies>
 
+
     <!--build-start-->
     <build>
         <!--apache tomcat manuel deployment için-->
@@ -208,7 +232,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.hamitmizrak.ATM/com.hamitmizrak.ATM.HelloApplication
+                                com.hamitmizrak.ibb_ecodation_javafx/com.hamitmizrak.ibb_ecodation_javafx.HelloApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

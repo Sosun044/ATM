@@ -1,8 +1,9 @@
 package com.muhammedsosun.atm.dto;
 
+import com.muhammedsosun.atm.utils.ERole;
 import lombok.*;
 
-@AllArgsConstructor//parametreli Construcutor
+//@AllArgsConstructor//parametreli Construcutor
 @NoArgsConstructor//parametresiz Construcutor
 @Getter
 @Setter
@@ -13,9 +14,20 @@ public class UserDTO {
     private String username;
     private String password;
     private String email;
+    private ERole role;
 
     //parametresiz Construcutor
     //parametreli Construcutor
+
+    public UserDTO(Integer id, String username, String password, String email, ERole role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
+
+
     //Getter and Setter
     //method
     /*

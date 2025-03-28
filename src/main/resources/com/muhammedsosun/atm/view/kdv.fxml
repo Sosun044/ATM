@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.muhammedsosun.atm.controller.KdvController">
+
+    <!-- ÜST: Arama ve Filtre -->
+    <top>
+        <HBox spacing="10" padding="10">
+            <Label text="Ara (Fiş No):" />
+            <TextField fx:id="searchField" promptText="Fiş no giriniz..." />
+            <Button text="Filtreyi Temizle" onAction="#clearFilters" />
+        </HBox>
+    </top>
+
+    <!-- ORTA: Tablo -->
+    <center>
+        <TableView fx:id="kdvTable">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" />
+                <TableColumn fx:id="amountColumn" text="Tutar" />
+                <TableColumn fx:id="kdvRateColumn" text="KDV (%)" />
+                <TableColumn fx:id="kdvAmountColumn" text="KDV Tutarı" />
+                <TableColumn fx:id="totalAmountColumn" text="Genel Toplam" />
+                <TableColumn fx:id="receiptColumn" text="Fiş No" />
+                <TableColumn fx:id="dateColumn" text="Tarih" />
+                <TableColumn fx:id="descColumn" text="Açıklama" />
+            </columns>
+        </TableView>
+    </center>
+
+    <!-- ALT: Butonlar -->
+    <bottom>
+        <HBox spacing="10" padding="10" alignment="CENTER_RIGHT">
+            <Button text="KDV Ekle" onAction="#addKdv" />
+            <Button text="Güncelle" onAction="#updateKdv" />
+            <Button text="Sil" onAction="#deleteKdv" />
+        </HBox>
+    </bottom>
+
+</BorderPane>

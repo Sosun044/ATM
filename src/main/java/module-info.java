@@ -1,18 +1,44 @@
 module com.muhammedsosun.atm {
     requires javafx.controls;
-    requires javafx.fxml;
-  //  requires javafx.web;
 
+    // JavaFX FXML dosyalarını (FXML UI tasarımları) yükleyebilmek için gereklidir.
+    requires javafx.fxml;
+
+    // WEB
+    //requires javafx.web;
+
+    // #######################################################################################
+    // UI geliştirme için kullanılan harici kütüphaneler
+    // ControlsFX, gelişmiş UI bileşenlerini (örn: Notifikasyonlar, Doğrulama Alanları) sağlar.
     requires org.controlsfx.controls;
+
+    // FormsFX, formlar için gelişmiş bileşenler sunan bir kütüphanedir.
     requires com.dlsc.formsfx;
+
+    // ValidatorFX, form doğrulama işlemleri için kullanılır.
     requires net.synedra.validatorfx;
+
+    // İkon kütüphanesi, UI'de çeşitli ikonları kullanmaya olanak tanır.
     requires org.kordamp.ikonli.javafx;
+
+    // BootstrapFX, Bootstrap benzeri CSS stillerini JavaFX'e entegre eder.
     requires org.kordamp.bootstrapfx.core;
+
+    // #############################################
+    // Lombok kütüphanesi, Java'da getter, setter, constructor gibi metotları otomatik oluşturur.
+    // Lombok, derleme zamanı (compile-time) kullanıldığı için "static" olarak eklenmiştir.
     requires static lombok;
-  //  requires eu.hansolo.tilesfx;
+
+    // JDBC ile veritabanı bağlantısı kurabilmek için gerekli modül
+    // Java'daki SQL işlemlerini (Connection, Statement, ResultSet vb.) gerçekleştirebilmek için gereklidir.
     requires java.sql;
-    requires org.apache.poi.poi;
-    
+    requires com.h2database;
+    requires jbcrypt;
+    requires org.apache.poi.ooxml;
+    requires org.apache.pdfbox;
+    requires java.desktop;
+    requires java.mail;
+
     opens com.muhammedsosun.atm to javafx.fxml;
 
 
@@ -34,6 +60,7 @@ module com.muhammedsosun.atm {
     exports com.muhammedsosun.atm.database;
 
     exports com.muhammedsosun.atm;
+    opens com.muhammedsosun.atm.utils to javafx.base, lombok;
 }
 /*
 
