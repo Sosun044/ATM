@@ -2,8 +2,6 @@ package com.muhammedsosun.atm.dao;
 
 import com.muhammedsosun.atm.database.SingletonPropertiesDBConnection;
 import com.muhammedsosun.atm.dto.KdvDTO;
-import com.muhammedsosun.atm.dto.UserDTO;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 import java.time.LocalDate;

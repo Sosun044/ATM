@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
 -- ###################################################################################################################
 
 -- Insert
-MERGE INTO users (id, username, password, email) KEY(id) VALUES (1,'Hamit','123456','hamitmizrak@gmail.com' )
+MERGE INTO users (id, username, password, email) KEY(id) VALUES (1,'muhammed','123456','muhammedsosun06@gmail.com' )
 
 -- Select
 select * FROM users;
@@ -24,7 +24,7 @@ select * FROM users;
 SELECT  *  FROM users WHERE username="Hamit" AND "123456";
 
 -- Update
-UPDATE users SET username="Hamit44", password="12345644", email="hamitmizrak@gmail.com44" WHERE id=1;
+UPDATE users SET username="sosun04", password="12345644", email="muhammedsosun06@gmail.com44" WHERE id=1;
 
 -- delete
 DELETE FROM users  WHERE id=1;

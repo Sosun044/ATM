@@ -20,7 +20,7 @@
                      -fx-background-color: rgba(255,255,255,0.85);
                      -fx-background-radius: 15;
                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 20, 0.5, 0, 5);"
-          stylesheets="@../css/styles.css">
+          stylesheets="@../view/css/styles.css">
 
         <!-- NAVIGATION MENÜ -->
         <MenuBar fx:id="menuBar">

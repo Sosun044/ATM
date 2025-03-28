@@ -9,7 +9,7 @@
       spacing="20"
       alignment="CENTER"
       style="-fx-padding: 40;
-             -fx-background-image: url('/images/deneme.png');
+             -fx-background-image: url('/images/login.webp');
              -fx-background-size: cover;
              -fx-background-position: center;
              -fx-background-repeat: no-repeat;
