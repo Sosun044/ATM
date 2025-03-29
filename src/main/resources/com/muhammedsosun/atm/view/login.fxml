@@ -32,5 +32,9 @@
             text="Giriş Yap"
             onAction="#login"
             style="-fx-font-size: 18px; -fx-background-color: #2a9df4; -fx-text-fill: white;"/>
+    <Button
+            text="Kayıt Yap"
+            onAction="#switchToRegister"
+            style="-fx-font-size: 18px; -fx-background-color: #2a9df4; -fx-text-fill: white;"/>
 
 </VBox>

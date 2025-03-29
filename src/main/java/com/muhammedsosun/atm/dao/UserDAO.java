@@ -22,7 +22,7 @@ public class UserDAO implements IDaoImplements<UserDTO>{
 
     @Override
     public Optional<UserDTO> create(UserDTO userDTO) {
-        String sql = "INSERT INTO users(username,password,email,role) VALUES(?,?,?,?)";
+        String sql = "INSERT INTO usertable(username,password,email,role) VALUES(?,?,?,?)";
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             String hashedPassword = BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt());
             preparedStatement.setString(1,userDTO.getUsername());
@@ -49,7 +49,7 @@ public class UserDAO implements IDaoImplements<UserDTO>{
     @Override
     public Optional<List<UserDTO>> list() {
         List<UserDTO> userDTOList = new ArrayList<>();
-        String sql  ="Select * FROM users";
+        String sql  ="Select * FROM usertable";
         try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -66,14 +66,14 @@ public class UserDAO implements IDaoImplements<UserDTO>{
     @Override
     public Optional<UserDTO> findByName(String name) {
         //String sql  ="Select * FROM users WHERE username=?";
-        String sql  ="Select * FROM users WHERE email=?";
+        String sql  ="Select * FROM usertable WHERE email=?";
         return selectSingle(sql,name);
 
     }
     //FINDBYID
     @Override
     public Optional<UserDTO> findById(int id) {
-        String sql  ="Select * FROM users WHERE id=?";
+        String sql  ="Select * FROM usertable WHERE id=?";
         return selectSingle(sql,id);
     }
     @Override
@@ -81,7 +81,7 @@ public class UserDAO implements IDaoImplements<UserDTO>{
 
         Optional<UserDTO> optionalUpdate = findById(id);
         if (optionalUpdate.isPresent()){
-            String sql = "UPDATE users SET username=?, password=?, email=?, role=? WHERE id=?";
+            String sql = "UPDATE usertable SET username=?, password=?, email=?, role=? WHERE id=?";
             try(PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 String hashedPassword = BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt());
                 preparedStatement.setString(1,userDTO.getUsername());
@@ -108,7 +108,7 @@ public class UserDAO implements IDaoImplements<UserDTO>{
     public Optional<UserDTO> delete(int id) {
         Optional<UserDTO> optionalDelete = findById(id);
         if (optionalDelete.isPresent()) {
-            String sql = "DELETE FROM users WHERE id=?";
+            String sql = "DELETE FROM usertable WHERE id=?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setInt(1, id);
                 int affectedRows = preparedStatement.executeUpdate();
@@ -151,7 +151,7 @@ public class UserDAO implements IDaoImplements<UserDTO>{
     }
 
     public Optional<UserDTO> loginUser(String usernameOrEmail, String password) {
-        String sql = "SELECT * FROM users WHERE username = ? OR email = ?";
+        String sql = "SELECT * FROM usertable WHERE username = ? OR email = ?";
         Optional<UserDTO> userOpt = selectSingle(sql, usernameOrEmail, usernameOrEmail);
 
         if (userOpt.isPresent()) {
@@ -176,16 +176,14 @@ public class UserDAO implements IDaoImplements<UserDTO>{
     }
 
     public boolean isEmailExists(String email) {
-        String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+        String sql = "SELECT 1 FROM usertable WHERE email = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
+            return rs.next();
         } catch (SQLException e) {
             e.printStackTrace();
+            return true; // hata varsa true dön ki işlem durdurulsun
         }
-        return true;
     }
 }

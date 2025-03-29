@@ -11,18 +11,10 @@ import java.util.Optional;
 
 public class KdvDAO implements IDaoImplements<KdvDTO>{
     private Connection connection;
+
     public KdvDAO(){
         this.connection = SingletonPropertiesDBConnection.getInstance().getConnection();
     }
-    private Integer id;
-    private Double amount;
-    private Double kdvAmount;
-    private Double kdvRate;
-    private Double totalAmount;
-    private String receiptNumber;
-    private LocalDate transactionDate;
-    private String description;
-    private String exportFormat;
     @Override
     public Optional<KdvDTO> create(KdvDTO kdvDTO) {
         String sql = "INSERT INTO kdv_table(amount,kdvAmount,kdvRate,totalAmount,receiptNumber,transactionDate,description,exportFormat) VALUES(?,?,?,?,?,?,?,?)";

@@ -22,7 +22,7 @@ public class HelloApplication extends Application {
         dataSet();
 
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("view/admin.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("view/login.fxml"));
         Parent parent = fxmlLoader.load();
         stage.setTitle("Kullanıcı Yönetimi Login Sayfası");
         stage.setScene(new Scene(parent));
@@ -69,15 +69,26 @@ public class HelloApplication extends Application {
         """;
 
         try (PreparedStatement ps = connection.prepareStatement(insertSQL)) {
-            ps.setString(1, "muhammedsosun");
+            // 1. kullanıcı
+            ps.setString(1, "hamitmizrak");
             ps.setString(2, BCrypt.hashpw("root", BCrypt.gensalt()));
-            ps.setString(3, "muhammedsosun06@gmail.com");
+            ps.setString(3, "hamitmizrak@gmail.com");
             ps.setString(4, "USER");
             ps.executeUpdate();
 
+            // 2. kullanıcı
             ps.setString(1, "admin");
+            //ps.setString(2, BCrypt.hashpw("root", BCrypt.gensalt()));
             ps.setString(2, BCrypt.hashpw("root", BCrypt.gensalt()));
-            ps.setString(3, "root@gmail.com");
+            ps.setString(3, "admin@gmail.com");
+            ps.setString(4, "ADMIN");
+            ps.executeUpdate();
+
+            // 3. kullanıcı
+            ps.setString(1, "root");
+            //ps.setString(2, BCrypt.hashpw("root", BCrypt.gensalt()));
+            ps.setString(2, BCrypt.hashpw("root", BCrypt.gensalt()));
+            ps.setString(3, "root");
             ps.setString(4, "ADMIN");
             ps.executeUpdate();
         }

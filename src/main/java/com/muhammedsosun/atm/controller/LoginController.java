@@ -21,21 +21,14 @@ import javafx.stage.Stage;
 import java.util.Optional;
 
 public class LoginController {
-
-    // Injection
-    // Veri tabanı işlemleri için)
     private UserDAO userDAO;
 
-    // Parametresiz Constructor
     public LoginController() {
         userDAO = new UserDAO();
     }
 
-    /// /////////////////////////////////////////////////////////////////////////////
-    ///  FXML Field
     @FXML
     private TextField usernameField;
-
     @FXML
     private TextField passwordField;
 
@@ -77,6 +70,7 @@ public class LoginController {
             showAlert("Başarısız", "Giriş bilgileri hatalı", Alert.AlertType.ERROR);
         }
     }
+
     private void openUserHomePane() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FXMLPath.USER_HOME));
@@ -91,6 +85,9 @@ public class LoginController {
             showAlert("Hata", "Kullanıcı ekranı yüklenemedi", Alert.AlertType.ERROR);
         }
     }
+
+
+
     private void openAdminPane() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FXMLPath.ADMIN));
@@ -107,19 +104,24 @@ public class LoginController {
         }
     }
 
-    /// //////////////////////////////////////////////////////////////////////////////////////
-    // Sayfalar Arasında Geçiş (LOGIN -> REGISTER)
-    // Register (Switch)
     @FXML
     private void switchToRegister(ActionEvent actionEvent) {
         try {
+            // 1.YOL
+            /*
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FXMLPath.REGISTER));
+            Parent parent = fxmlLoader.load();
+            Stage stage = (Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(parent));
+            stage.setTitle("Kayıt Ol");
+            stage.show();
+             */
+            // 2.YOL
             SceneHelper.switchScene(FXMLPath.REGISTER, usernameField, "Kayıt Ol");
         } catch (Exception e) {
-            //throw new RuntimeException(e);
-            System.out.println(SpecialColor.RED + "Register Sayfasında yönlendirilmedi" + SpecialColor.RESET);
+            System.out.println(SpecialColor.RED + "Register Sayfasına yönlendirme başarısız" + SpecialColor.RESET);
             e.printStackTrace();
-            showAlert("Hata", "Kayıt Ekranı Yüklenemedi", Alert.AlertType.ERROR);
+            showAlert("Hata", "Kayıt ekranı yüklenemedi", Alert.AlertType.ERROR);
         }
-    } //end switchToLogin
-
+    }
 } //end LoginController

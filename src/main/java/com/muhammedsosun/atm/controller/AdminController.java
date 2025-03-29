@@ -5,6 +5,10 @@ import com.muhammedsosun.atm.dto.KdvDTO;
 import com.muhammedsosun.atm.utils.ERole;
 import com.muhammedsosun.atm.dto.UserDTO;
 import com.muhammedsosun.atm.utils.FXMLPath;
+
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,6 +25,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -41,34 +46,30 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
 public class AdminController {
+
     private UserDAO userDAO;
     private KdvDAO kdvDAO;
 
-    public AdminController(){
+    public AdminController() {
         userDAO = new UserDAO();
         kdvDAO = new KdvDAO();
     }
-    @FXML
-    private TableView<UserDTO> userTable;
-    @FXML
-    private TableColumn<UserDTO,Integer> idColumn;
-    @FXML
-    private TableColumn<UserDTO,String> usernameColumn;
-    @FXML
-    private TableColumn<UserDTO,String> emailColumn;
-    @FXML
-    private TableColumn<UserDTO,String> passwordColumn;
-    @FXML
-    private TableColumn<UserDTO,String> roleColumn;
-    @FXML
-    private TextField searchField;
-    @FXML
-    private ComboBox<ERole> filterRoleComboBox;
+
+    @FXML private TableView<UserDTO> userTable;
+    @FXML private TableColumn<UserDTO, Integer> idColumn;
+    @FXML private TableColumn<UserDTO, String> usernameColumn;
+    @FXML private TableColumn<UserDTO, String> emailColumn;
+    @FXML private TableColumn<UserDTO, String> passwordColumn;
+    @FXML private TableColumn<UserDTO, String> roleColumn;
+    @FXML private TextField searchField;
+    @FXML private ComboBox<ERole> filterRoleComboBox;
 
     @FXML
     private TableView<KdvDTO> kdvTable;
@@ -92,7 +93,23 @@ public class AdminController {
     private TextField searchKdvField;
 
     @FXML
+    private Label clockLabel;
+
+
+    @FXML
     public void initialize() {
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.seconds(1), e -> {
+                    LocalDateTime now = LocalDateTime.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+                    clockLabel.setText(now.format(formatter));
+                })
+        );
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+
+
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -104,6 +121,7 @@ public class AdminController {
 
         searchField.textProperty().addListener((observable, oldVal, newVal) -> applyFilters());
         filterRoleComboBox.valueProperty().addListener((obs, oldVal, newVal) -> applyFilters());
+
         passwordColumn.setCellValueFactory(new PropertyValueFactory<>("password"));
         passwordColumn.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -129,6 +147,8 @@ public class AdminController {
 
         refreshKdvTable();
     }
+
+    // KULLANICI
     private void applyFilters() {
         String keyword = searchField.getText().toLowerCase().trim();
         ERole selectedRole = filterRoleComboBox.getValue();
@@ -151,6 +171,7 @@ public class AdminController {
 
         userTable.setItems(FXCollections.observableArrayList(filteredList));
     }
+
     @FXML
     public void clearFilters() {
         searchField.clear();
@@ -158,19 +179,9 @@ public class AdminController {
     }
 
     @FXML
-    private void refreshTable() {
-        applyFilters();
-        Optional<List<UserDTO>> optionalUsers = userDAO.list();
-        List<UserDTO> userDTOList = optionalUsers.orElseGet(List::of);
-        ObservableList<UserDTO> observableList = FXCollections.observableArrayList(userDTOList);
-        userTable.setItems(observableList);
-        showAlert("Bilgi", "Tablo başarıyla yenilendi!", Alert.AlertType.INFORMATION);
-    }
-
-    @FXML
     public void openKdvPane() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/muhammed/atm/view/kdv.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/muhammedsosun/view/kdv.fxml"));
             Parent kdvRoot = loader.load();
             Stage stage = new Stage();
             stage.setTitle("KDV Paneli");
@@ -182,8 +193,17 @@ public class AdminController {
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Kullanıcıya mesaj göstermek için genel bir metod
+
+    @FXML
+    private void refreshTable() {
+        applyFilters();
+        Optional<List<UserDTO>> optionalUsers = userDAO.list();
+        List<UserDTO> userDTOList = optionalUsers.orElseGet(List::of);
+        ObservableList<UserDTO> observableList = FXCollections.observableArrayList(userDTOList);
+        userTable.setItems(observableList);
+        showAlert("Bilgi", "Tablo başarıyla yenilendi!", Alert.AlertType.INFORMATION);
+    }
+
     private void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -210,6 +230,7 @@ public class AdminController {
             }
         }
     }
+
     @FXML
     public void printTable() {
         Printer printer = Printer.getDefaultPrinter();
@@ -229,6 +250,7 @@ public class AdminController {
             }
         }
     }
+
     @FXML
     public void openCalculator() {
         String os = System.getProperty("os.name").toLowerCase();
@@ -247,6 +269,7 @@ public class AdminController {
             e.printStackTrace();
         }
     }
+
     @FXML
     public void openKdvCalculator() {
         Dialog<Void> dialog = new Dialog<>();
@@ -314,6 +337,7 @@ public class AdminController {
 
         dialog.showAndWait();
     }
+
     private void showExportOptions(String content) {
         ChoiceDialog<String> dialog = new ChoiceDialog<>("TXT", "TXT", "PDF", "EXCEL", "MAIL");
         dialog.setTitle("Dışa Aktar");
@@ -337,8 +361,8 @@ public class AdminController {
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(receiver -> {
-            String senderEmail = "seninmailin@gmail.com"; // değiştir
-            String senderPassword = "uygulama-sifresi"; // değiştir
+            String senderEmail = "seninmailin@gmail.com";
+            String senderPassword = "uygulama-sifresi";
             String host = "smtp.gmail.com";
             int port = 587;
 
@@ -370,6 +394,8 @@ public class AdminController {
             }
         });
     }
+
+
     private void exportAsTxt(String content) {
         try {
             Path path = Paths.get(System.getProperty("user.home"), "Desktop",
@@ -407,6 +433,8 @@ public class AdminController {
             showAlert("Hata", "PDF kaydedilemedi.", Alert.AlertType.ERROR);
         }
     }
+
+
     private void exportAsExcel(String content) {
         try (Workbook wb = new XSSFWorkbook()) {
             Sheet sheet = wb.createSheet("KDV");
@@ -457,6 +485,7 @@ public class AdminController {
         }
     }
 
+
     @FXML
     public void exportKdvAsTxt() {
         exportAsTxt(generateKdvSummary());
@@ -491,6 +520,8 @@ public class AdminController {
     public void sendKdvByMail() {
         sendMail(generateKdvSummary());
     }
+
+
     private String generateKdvSummary() {
         StringBuilder builder = new StringBuilder();
         builder.append("ID\tTutar\tKDV Oranı\tKDV Tutarı\tToplam\tFiş No\tTarih\tAçıklama\n");
@@ -513,6 +544,7 @@ public class AdminController {
     private void handleNew() {
         System.out.println("Yeni oluşturuluyor...");
     }
+
     @FXML
     private void handleOpen() {
         System.out.println("Dosya açılıyor...");
@@ -785,8 +817,7 @@ public class AdminController {
         Optional<String> newEmail = emailDialog.showAndWait();
         if (newEmail.isEmpty()) return;
 
-        // Sayfa açılır açılmaz geliyor
-        //String role = roleComboBox.getValue();
+
 
         UserDTO updatedUser = UserDTO.builder()
                 .username(newUsername.get())
@@ -974,4 +1005,42 @@ public class AdminController {
         Optional<KdvDTO> result = dialog.showAndWait();
         return result.orElse(null);
     }
+
+    // BİTİRME PROJESİ
+    @FXML
+    private void toggleTheme(ActionEvent event) {
+        // Tema değiştirme işlemleri burada yapılacak
+    }
+
+    @FXML
+    private void languageTheme(ActionEvent event) {
+        // Uygulamanın dili değiştirilecek (TR/EN vs.)
+    }
+
+    @FXML
+    private void showNotifications(ActionEvent event) {
+        // Bildirimleri gösteren popup veya panel açılacak
+    }
+
+    @FXML
+    private void showProfile(ActionEvent event) {
+        // Kullanıcı profil bilgileri gösterilecek pencere
+    }
+
+    @FXML
+    private void backupData(ActionEvent event) {
+        // Veritabanı yedekleme işlemleri burada yapılacak
+    }
+
+    @FXML
+    private void restoreData(ActionEvent event) {
+        // Daha önce alınmış bir yedek dosyadan veri geri yüklenecek
+    }
+
+
+    @FXML
+    private void notebook(ActionEvent event) {
+        // Daha önce alınmış bir yedek dosyadan veri geri yüklenecek
+    }
+
 }

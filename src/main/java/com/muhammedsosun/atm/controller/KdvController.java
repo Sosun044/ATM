@@ -2,13 +2,14 @@ package com.muhammedsosun.atm.controller;
 
 import com.muhammedsosun.atm.dao.KdvDAO;
 import com.muhammedsosun.atm.dto.KdvDTO;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 
-import javafx.event.ActionEvent;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -17,29 +18,19 @@ public class KdvController {
 
     private final KdvDAO kdvDAO = new KdvDAO();
 
-    @FXML
-    private TableView<KdvDTO> kdvTable;
-    @FXML
-    private TableColumn<KdvDTO,Integer> idColumn;
-    @FXML
-    private TableColumn<KdvDTO,Double> amountColumn;
-    @FXML
-    private TableColumn<KdvDTO,Double> kdvRateColumn;
-    @FXML
-    private TableColumn<KdvDTO,Double> kdvAmountColumn;
-    @FXML
-    private TableColumn<KdvDTO,Double> totalAmountColumn;
-    @FXML
-    private TableColumn<KdvDTO,String> receiptColumn;
-    @FXML
-    private TableColumn<KdvDTO,LocalDate> dateColumn;
-    @FXML
-    private TableColumn<KdvDTO, String> descColumn;
-    @FXML
-    private TextField searchField;
+    @FXML private TableView<KdvDTO> kdvTable;
+    @FXML private TableColumn<KdvDTO, Integer> idColumn;
+    @FXML private TableColumn<KdvDTO, Double> amountColumn;
+    @FXML private TableColumn<KdvDTO, Double> kdvRateColumn;
+    @FXML private TableColumn<KdvDTO, Double> kdvAmountColumn;
+    @FXML private TableColumn<KdvDTO, Double> totalAmountColumn;
+    @FXML private TableColumn<KdvDTO, String> receiptColumn;
+    @FXML private TableColumn<KdvDTO, LocalDate> dateColumn;
+    @FXML private TableColumn<KdvDTO, String> descColumn;
+    @FXML private TextField searchField;
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         kdvRateColumn.setCellValueFactory(new PropertyValueFactory<>("kdvRate"));
@@ -52,10 +43,12 @@ public class KdvController {
         searchField.textProperty().addListener((obs, oldVal, newVal) -> applyFilter());
         refreshTable();
     }
+
     public void refreshTable() {
         Optional<List<KdvDTO>> list = kdvDAO.list();
         list.ifPresent(data -> kdvTable.setItems(FXCollections.observableArrayList(data)));
     }
+
     private void applyFilter() {
         String keyword = searchField.getText().trim().toLowerCase();
         Optional<List<KdvDTO>> all = kdvDAO.list();
@@ -70,6 +63,7 @@ public class KdvController {
         searchField.clear();
         refreshTable();
     }
+
     @FXML
     public void addKdv(ActionEvent event) {
         KdvDTO newKdv = showKdvForm(null);
@@ -79,6 +73,7 @@ public class KdvController {
             showAlert("Başarılı", "KDV kaydı eklendi.", Alert.AlertType.INFORMATION);
         }
     }
+
     @FXML
     public void updateKdv(ActionEvent event) {
         KdvDTO selected = kdvTable.getSelectionModel().getSelectedItem();
@@ -93,6 +88,7 @@ public class KdvController {
             showAlert("Başarılı", "KDV kaydı güncellendi.", Alert.AlertType.INFORMATION);
         }
     }
+
     @FXML
     public void deleteKdv(ActionEvent event) {
         KdvDTO selected = kdvTable.getSelectionModel().getSelectedItem();
@@ -116,6 +112,7 @@ public class KdvController {
         alert.setContentText(msg);
         alert.showAndWait();
     }
+
     private KdvDTO showKdvForm(KdvDTO existing) {
         Dialog<KdvDTO> dialog = new Dialog<>();
         dialog.setTitle(existing == null ? "Yeni KDV Ekle" : "KDV Güncelle");

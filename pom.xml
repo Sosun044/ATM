@@ -24,7 +24,12 @@
         <url/>
     </scm>
 
-
+    <!--
+    war: java EE için kullanalım. JSP,servlet,html,css3
+    jar: Spring Boot için kullanalım
+    -->
+    <!--apache tomcat manuel için war ekliyorum-->
+    <!--<packaging>war</packaging>-->
     <packaging>jar</packaging>
 
     <!--Dikkat: JavaFX JDK 17 istiyor 27-03-2025-->
@@ -86,7 +91,18 @@
             <version>3.36.0.3</version>
         </dependency>
 
+        <!-- RDBMS MYSQL-->
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <!--
+            <dependency>
+                 <groupId>mysql</groupId>
+                 <artifactId>mysql-connector-java</artifactId>
+                 <version>8.0.28</version>
+             </dependency>
+         -->
 
+        <!-- OTHER SPECIAL LIBRARIES -->
+        <!-- JavaMail API -->
         <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
@@ -216,7 +232,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.muhammedsosun.atm/com.muhammedsosun.atm.HelloApplication
+                                com.hamitmizrak.ibb_ecodation_javafx/com.hamitmizrak.ibb_ecodation_javafx.HelloApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

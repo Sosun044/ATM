@@ -7,10 +7,14 @@ import com.muhammedsosun.atm.utils.FXMLPath;
 import com.muhammedsosun.atm.utils.SceneHelper;
 import com.muhammedsosun.atm.utils.SpecialColor;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 
 import java.util.Optional;
 
@@ -80,9 +84,22 @@ public class RegisterController {
             showAlert("Hata", "Kayıt başarısız oldu", Alert.AlertType.ERROR);
         }
     }
+
+
+    @FXML
     private void switchToLoginPane() {
         try {
-            SceneHelper.switchScene(FXMLPath.LOGIN,usernameField,"Giriş Yap");
+            //1.YOL
+            /*
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FXMLPath.LOGIN));
+            Parent parent = fxmlLoader.load();
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            stage.setScene(new Scene(parent));
+            stage.setTitle("Giriş Yap");
+            stage.show();
+             */
+            //2.YOL
+            SceneHelper.switchScene(FXMLPath.LOGIN, usernameField, "Giriş Yap");
         } catch (Exception e) {
             System.out.println(SpecialColor.RED + "Login Sayfasına yönlendirme başarısız" + SpecialColor.RESET);
             e.printStackTrace();
