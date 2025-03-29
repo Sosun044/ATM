@@ -34,7 +34,7 @@ Kurulum (Installation)
 
 Projeyi klonlayın:
 
-git clone https://github.com/username/atm-javafx.git
+git clone https://github.com/muhammedsosun/atm-javafx.git
 
 Maven bağımlılıklarını yükleyin:
 
@@ -52,8 +52,7 @@ h2db_data.sql dosyası, veritabanının başlangıç verilerini içerir.
 
 Varsayılan bağlantı bilgileri:
 
-JDBC URL: jdbc:h2:~/atm_db
-Kullanıcı Adı: admin
-Şifre: admin
+JDBC URL: jdbc:h2:./atm_db
+
 
 Veritabanı dosyaları database klasöründe bulunmaktadır.
