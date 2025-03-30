@@ -23,6 +23,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -94,6 +95,7 @@ public class AdminController {
 
     @FXML
     private Label clockLabel;
+
 
 
     @FXML
@@ -181,7 +183,7 @@ public class AdminController {
     @FXML
     public void openKdvPane() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/muhammedsosun/view/kdv.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/muhammedsosun/atm/view/kdv.fxml"));
             Parent kdvRoot = loader.load();
             Stage stage = new Stage();
             stage.setTitle("KDV Paneli");
@@ -1009,8 +1011,11 @@ public class AdminController {
     // BİTİRME PROJESİ
     @FXML
     private void toggleTheme(ActionEvent event) {
-        // Tema değiştirme işlemleri burada yapılacak
-    }
+
+        }
+
+
+
 
     @FXML
     private void languageTheme(ActionEvent event) {

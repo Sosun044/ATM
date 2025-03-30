@@ -46,7 +46,7 @@ public class SingletonPropertiesDBConnection {
 
     // config.properties dosyasını oku
     private static void loadDatabaseConfig() {
-        try (FileInputStream fis = new FileInputStream("src/main/config.properties")) {
+        try (FileInputStream fis = new FileInputStream("config.properties")) {
             Properties properties = new Properties();
             properties.load(fis);
 

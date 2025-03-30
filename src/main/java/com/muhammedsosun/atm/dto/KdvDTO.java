@@ -3,7 +3,6 @@ package com.muhammedsosun.atm.dto;
 import lombok.*;
 
 import java.time.LocalDate;
-
 @Getter
 @Setter
 @NoArgsConstructor

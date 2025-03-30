@@ -46,13 +46,14 @@ public class KdvDAO implements IDaoImplements<KdvDTO>{
     @Override
     public Optional<List<KdvDTO>> list() {
         List<KdvDTO> list = new ArrayList<>();
-        String sql = "Select * from kdv_table ORDER BY transactionDate DESC";
-        try(PreparedStatement ps = connection.prepareStatement(sql)) {
+        String sql = "SELECT * FROM kdv_table ORDER BY transactionDate DESC";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 list.add(mapToObjectDTO(rs));
             }
-        }catch (Exception e) {
+            return list.isEmpty() ? Optional.empty() : Optional.of(list);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return Optional.empty();

@@ -9,7 +9,7 @@
         <VBox>
             <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-background-color: #2c3e50; -fx-padding: 10;">
                 <Label text="🔧 Yönetim Paneli" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" />
-                <Button text="🌙 Karanlık Mod" onAction="#toggleTheme" style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-background-radius: 8;" />
+                <Button text="🌙 Karanlık Mod" onAction="#toggleTheme" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-background-radius: 8;" />
                 <Button text="🌐 Dil" onAction="#languageTheme" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 8;" />
                 <Button text="🔔 Bildirimler" onAction="#showNotifications" style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-background-radius: 8;" />
                 <Button text="💾 Yedekle" onAction="#backupData" style="-fx-background-color: #16a085; -fx-text-fill: white; -fx-background-radius: 8;" />
