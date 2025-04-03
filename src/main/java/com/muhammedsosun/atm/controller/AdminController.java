@@ -48,6 +48,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -609,7 +610,7 @@ public class AdminController implements Initializable {
         private final TextField usernameField = new TextField();
         private final PasswordField passwordField = new PasswordField();
         private final TextField emailField = new TextField();
-        private final ComboBox<String> roleComboBox = new ComboBox<>();
+        private final ComboBox<ERole> roleComboBox = new ComboBox<>();
 
         public AddUserDialog() {
             setTitle("Yeni Kullanıcı Ekle");
@@ -661,6 +662,8 @@ public class AdminController implements Initializable {
     public void addUser(ActionEvent actionEvent) {
         AddUserDialog dialog = new AddUserDialog();
         Optional<UserDTO> result = dialog.showAndWait();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+
 
         result.ifPresent(newUser -> {
             if (newUser.getUsername().isEmpty() || newUser.getPassword().isEmpty() || newUser.getEmail().isEmpty()) {
@@ -681,6 +684,10 @@ public class AdminController implements Initializable {
             Optional<UserDTO> createdUser = userDAO.create(newUser);
             if (createdUser.isPresent()) {
                 showAlert("Başarılı", "Kullanıcı başarıyla eklendi!", Alert.AlertType.INFORMATION);
+
+                String username = createdUser.get().getUsername();
+                NotificationController.addNotification(username + " Eklendi" +"  " + formatter.format(new Date()));
+                
                 refreshTable();
             } else {
                 showAlert("Hata", "Kullanıcı eklenemedi!", Alert.AlertType.ERROR);
@@ -928,9 +935,12 @@ public class AdminController implements Initializable {
     public void addKdv() {
         KdvDTO newKdv = showKdvForm(null);
         if (newKdv != null && newKdv.isValid()) {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
             kdvDAO.create(newKdv);
             refreshKdvTable();
             showAlert("Başarılı", "KDV kaydı eklendi.", Alert.AlertType.INFORMATION);
+            NotificationController.addNotification("Fiş No:  " + newKdv.getReceiptNumber() + " Numaralı KDV Eklendi " + formatter.format(new Date()));
+
         }
     }
 

@@ -7,14 +7,10 @@ import com.muhammedsosun.atm.utils.FXMLPath;
 import com.muhammedsosun.atm.utils.SceneHelper;
 import com.muhammedsosun.atm.utils.SpecialColor;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
 
 import java.util.Optional;
 
