@@ -3,10 +3,7 @@ package com.muhammedsosun.atm.controller;
 
 import com.muhammedsosun.atm.dao.UserDAO;
 import com.muhammedsosun.atm.dto.UserDTO;
-import com.muhammedsosun.atm.utils.ERole;
-import com.muhammedsosun.atm.utils.FXMLPath;
-import com.muhammedsosun.atm.utils.SceneHelper;
-import com.muhammedsosun.atm.utils.SpecialColor;
+import com.muhammedsosun.atm.utils.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +15,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Optional;
 
 public class LoginController {
@@ -31,6 +32,8 @@ public class LoginController {
     private TextField usernameField;
     @FXML
     private TextField passwordField;
+
+
 
     private void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
@@ -48,26 +51,44 @@ public class LoginController {
 
     @FXML
     public void login() {
-
-        //
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
 
         Optional<UserDTO> optionalLoginUserDTO = userDAO.loginUser(username, password);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
         if (optionalLoginUserDTO.isPresent()) {
             UserDTO userDTO = optionalLoginUserDTO.get();
             showAlert("Başarılı", "Giriş Başarılı: " + userDTO.getUsername(), Alert.AlertType.INFORMATION);
 
+            // 🔥 Kullanıcıyı SessionManager'a Set Et
+            SessionManager.setCurrentUser(userDTO);
+
+            // 🔍 Veritabanından Tam Profili Al
+            Optional<UserDTO> fullUserProfile = userDAO.findById(userDTO.getId());
+
+            fullUserProfile.ifPresent(freshUser -> {
+                userDTO.setEmail(freshUser.getEmail());
+                userDTO.setRole(freshUser.getRole());
+            });
+
+            // 🔥 Güncellenmiş Kullanıcıyı Tekrar Set Et
+            SessionManager.setCurrentUser(userDTO);
+
+            // 📢 Bildirim ekle (Doğru yerde!)
+            NotificationController.addNotification("✅ " + userDTO.getUsername() + " giriş yaptı!"+ "   Giriş Yapıldıgı tarih:  " +  formatter.format(new Date()));
+
+
+            // 🎯 Kullanıcı Yönlendirmesi
             if (userDTO.getRole() == ERole.ADMIN) {
-                openAdminPane();
+                openAdminPane(userDTO);
             } else {
                 openUserHomePane();
             }
 
-
         } else {
             showAlert("Başarısız", "Giriş bilgileri hatalı", Alert.AlertType.ERROR);
+            NotificationController.addNotification("Hatalı giriş yapıldı!" +" Tarih:  " + formatter.format(new Date()));
         }
     }
 
@@ -87,11 +108,13 @@ public class LoginController {
     }
 
 
-
-    private void openAdminPane() {
+    private void openAdminPane(UserDTO user) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FXMLPath.ADMIN));
             Parent parent = fxmlLoader.load();
+
+            AdminController controller = fxmlLoader.getController();
+            controller.setUser(user); // ✅ artık null değil
 
             Stage stage = (Stage) usernameField.getScene().getWindow();
             stage.setScene(new Scene(parent));

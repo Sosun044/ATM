@@ -6,6 +6,7 @@ import com.muhammedsosun.atm.utils.ERole;
 import com.muhammedsosun.atm.dto.UserDTO;
 import com.muhammedsosun.atm.utils.FXMLPath;
 
+import com.muhammedsosun.atm.utils.SessionManager;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -1272,11 +1273,49 @@ public class AdminController implements Initializable {
     @FXML
     private void showNotifications(ActionEvent event) {
         // Bildirimleri gösteren popup veya panel açılacak
-    }
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/muhammedsosun/atm/view/notification.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Bildirimler");
+            stage.setScene(new Scene(root));
+            stage.show();
 
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    // Kullanıcı profil bilgileri gösterilecek pencere
+    private UserDTO currentUser;
+
+    public void setUser(UserDTO user) {
+        System.out.println("✅ AdminController#setUser: " + user);
+        this.currentUser = user;
+    }
     @FXML
-    private void showProfile(ActionEvent event) {
-        // Kullanıcı profil bilgileri gösterilecek pencere
+    private void showProfile() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/muhammedsosun/atm/view/profile.fxml"));
+            Parent root = loader.load();
+
+            ProfileController controller = loader.getController();
+            UserDTO currentUser = SessionManager.getCurrentUser();
+
+            if (currentUser != null) {
+                controller.setUser(currentUser);
+            } else {
+                System.err.println("currentUser null! setUser(...) çağrılmamış olabilir.");
+                return;
+            }
+
+            Stage stage = new Stage();
+            stage.setTitle("Profil");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
