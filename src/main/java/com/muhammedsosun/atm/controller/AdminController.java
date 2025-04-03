@@ -15,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.print.Printer;
 import javafx.print.PrinterJob;
@@ -23,7 +24,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -43,20 +43,22 @@ import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
-public class AdminController {
+public class AdminController implements Initializable {
+
+
 
     private UserDAO userDAO;
     private KdvDAO kdvDAO;
+
 
     public AdminController() {
         userDAO = new UserDAO();
@@ -99,8 +101,18 @@ public class AdminController {
 
 
     @FXML
+    private Button btnKdvExportTxt, btnKdvExportPdf, btnKdvExportExcel, btnKdvPrint, btnKdvMail;
+
+
+    @FXML
+    public MenuButton languageMenuButton;
+    private Locale currentLocale = new Locale("tr");
+    private ResourceBundle bundle;
+
+    @FXML
     public void initialize() {
 
+        // Zaman
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(1), e -> {
                     LocalDateTime now = LocalDateTime.now();
@@ -111,16 +123,18 @@ public class AdminController {
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
 
-
+        // KULLANICI
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
 
-        filterRoleComboBox.getItems().add(null);
+        // Rol filtreleme için ComboBox
+        filterRoleComboBox.getItems().add(null); // boş seçenek: tüm roller
         filterRoleComboBox.getItems().addAll(ERole.values());
-        filterRoleComboBox.setValue(null);
+        filterRoleComboBox.setValue(null); // başlangıçta tüm roller
 
+        // Arama kutusu dinleme
         searchField.textProperty().addListener((observable, oldVal, newVal) -> applyFilters());
         filterRoleComboBox.valueProperty().addListener((obs, oldVal, newVal) -> applyFilters());
 
@@ -133,9 +147,13 @@ public class AdminController {
             }
         });
 
-
+        // Sayfa Açılır açılmaz geliyor
+        //roleComboBox.setItems(FXCollections.observableArrayList("USER", "ADMIN", "MODERATOR"));
+        //roleComboBox.getSelectionModel().select("USER");
         refreshTable();
 
+        // KDV İÇİN
+        // KDV tablosunu hazırla
         idColumnKdv.setCellValueFactory(new PropertyValueFactory<>("id"));
         amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         kdvRateColumn.setCellValueFactory(new PropertyValueFactory<>("kdvRate"));
@@ -319,12 +337,12 @@ public class AdminController {
                     double total = amount + kdv;
 
                     String result = String.format("""
-                            Fiş No: %s
-                            Tarih: %s
-                            Ara Toplam: %.2f ₺
-                            KDV (%%%.1f): %.2f ₺
-                            Genel Toplam: %.2f ₺
-                            """,
+                                    Fiş No: %s
+                                    Tarih: %s
+                                    Ara Toplam: %.2f ₺
+                                    KDV (%%%.1f): %.2f ₺
+                                    Genel Toplam: %.2f ₺
+                                    """,
                             receiptField.getText(), datePicker.getValue(),
                             amount, rate, kdv, total);
 
@@ -1007,20 +1025,249 @@ public class AdminController {
         Optional<KdvDTO> result = dialog.showAndWait();
         return result.orElse(null);
     }
+    private boolean isDarkMode = false; // Başlangıçta açık tema
+    private boolean isLightMode = true; // Başlangıçta açık tema
+    private boolean isModernMode = false; // Başlangıçta modern tema
 
-    // BİTİRME PROJESİ
     @FXML
     private void toggleTheme(ActionEvent event) {
+        Scene scene = modeButton.getScene();
+        if (scene == null) return;
 
+        // Temalar
+        String darkTheme = getClass().getResource("/com/muhammedsosun/atm/css/dark-theme.css").toExternalForm();
+        String lightTheme = getClass().getResource("/com/muhammedsosun/atm/css/admin.css").toExternalForm();
+        String modernTheme = getClass().getResource("/com/muhammedsosun/atm/css/modern-theme.css").toExternalForm();
+
+        // Temaların hepsini kaldırıyoruz
+        scene.getStylesheets().clear();
+
+        if (isLightMode) {
+            // Light mode'dan çıkıp Modern mode'a geçiyoruz
+            scene.getStylesheets().add(darkTheme);
+            isDarkMode = true;
+            isLightMode = false;
+            isModernMode = false;
         }
+        else if (isDarkMode) {
+            // Dark mode'dan çıkıp Light mode'a geçiyoruz
+            scene.getStylesheets().add(modernTheme);
+            isDarkMode = false;
+            isLightMode = false;
+            isModernMode = true;
+        }  else if (isModernMode) {
+            // Modern mode'dan çıkıp Dark mode'a geçiyoruz
+            scene.getStylesheets().add(lightTheme);
+            isDarkMode = false;
+            isLightMode = true;
+            isModernMode = false;
+        }
+    }
 
 
+    //Dil seçeneği
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        loadLanguage(currentLocale);
+    }
+
+    @FXML
+    private void languageTheme() {
+        if (!currentLocale.getLanguage().equals("tr") && !currentLocale.getLanguage().equals("al")){
+            currentLocale = new Locale("en");
+        }else if (!currentLocale.getLanguage().equals("en") && !currentLocale.getLanguage().equals("al")) {
+            currentLocale = new Locale("tr");
+        }else if (!currentLocale.getLanguage().equals("tr") && !currentLocale.getLanguage().equals("en")){
+            currentLocale = new  Locale("al");
+        }
+    }
+
+    //Header FXML
+
+    @FXML
+    private Label headerLabel;
+    @FXML
+    private Button modeButton;
+    @FXML
+    private Button notificationButton;
+    @FXML
+    private Button backupButton;
+    @FXML
+    private Button restoreButton;
+    @FXML
+    private Button notebookButton;
+    @FXML
+    private Button profileButton;
+    @FXML
+    private Button logoutButton;
+
+//menü FXML
+
+    @FXML
+    private Menu menuFile;
+    @FXML
+    private MenuItem menuItemExit;
+
+    @FXML
+    private Menu menuUser;
+    @FXML
+    private MenuItem menuItemAddUser;
+    @FXML
+    private MenuItem menuItemUpdateUser;
+    @FXML
+    private MenuItem menuItemDeleteUser;
+
+    @FXML
+    private Menu menuKdv;
+    @FXML
+    private MenuItem menuItemAddKdv;
+    @FXML
+    private MenuItem menuItemUpdateKdv;
+    @FXML
+    private MenuItem menuItemDeleteKdv;
+
+    @FXML
+    private Menu menuOther;
+    @FXML
+    private MenuItem menuItemCalculator;
+    @FXML
+    private MenuItem menuItemNotebook;
+
+    @FXML
+    private Menu menuHelp;
+    @FXML
+    private MenuItem menuItemAbout;
+
+    @FXML
+    private Label userTitleLabel;
+    @FXML
+    private Button btnAddUser;
+    @FXML
+    private Button btnUpdateUser;
+    @FXML
+    private Button btnDeleteUser;
+    @FXML
+    private Button btnPrintUser;
+
+    @FXML
+    private Button btnAddKdv;
+    @FXML
+    private Button btnUpdateKdv;
+    @FXML
+    private Button btnDeleteKdv;
+
+    @FXML
+    private Label kdvTitleLabel;
+
+    @FXML
+    private Label footerLabel;
+
+
+    private void loadLanguage(Locale locale){
+        bundle = ResourceBundle.getBundle("com.muhammedsosun.atm.lang",locale);
+
+        headerLabel.setText(bundle.getString("header.panel"));
+        modeButton.setText(bundle.getString("theme"));
+        languageMenuButton.setText(bundle.getString("language")); // MenuButton için
+        notificationButton.setText(bundle.getString("notifications"));
+        backupButton.setText(bundle.getString("backup"));
+        restoreButton.setText(bundle.getString("restore"));
+        notebookButton.setText(bundle.getString("notebook"));
+        profileButton.setText(bundle.getString("profile"));
+        logoutButton.setText(bundle.getString("logout"));
+
+// Menü başlıkları ve item'lar
+        menuFile.setText(bundle.getString("menu.file"));
+        menuItemExit.setText(bundle.getString("menu.exit"));
+
+        menuUser.setText(bundle.getString("menu.user"));
+        menuItemAddUser.setText(bundle.getString("menu.addUser"));
+        menuItemUpdateUser.setText(bundle.getString("menu.updateUser"));
+        menuItemDeleteUser.setText(bundle.getString("menu.deleteUser"));
+
+        menuKdv.setText(bundle.getString("menu.kdv"));
+        menuItemAddKdv.setText(bundle.getString("menu.addKdv"));
+        menuItemUpdateKdv.setText(bundle.getString("menu.updateKdv"));
+        menuItemDeleteKdv.setText(bundle.getString("menu.deleteKdv"));
+
+        menuOther.setText(bundle.getString("menu.other"));
+        menuItemCalculator.setText(bundle.getString("menu.calculator"));
+        menuItemNotebook.setText(bundle.getString("menu.notebook"));
+
+        menuHelp.setText(bundle.getString("menu.help"));
+        menuItemAbout.setText(bundle.getString("menu.about"));
+
+        // Kullanıcı yönetimi paneli
+
+        searchField.setPromptText(bundle.getString("user.searchPrompt"));
+        filterRoleComboBox.setPromptText(bundle.getString("user.rolePrompt"));
+
+
+        // KDV paneli
+        kdvTitleLabel.setText(bundle.getString("kdv.title"));
+
+
+        btnAddKdv.setText(bundle.getString("kdv.add"));
+        btnUpdateKdv.setText(bundle.getString("kdv.update"));
+        btnDeleteKdv.setText(bundle.getString("kdv.delete"));
+
+        searchKdvField.setPromptText(bundle.getString("kdv.searchPrompt"));
+
+        btnKdvExportTxt.setText(bundle.getString("kdv.exportTxt"));
+        btnKdvExportPdf.setText(bundle.getString("kdv.exportPdf"));
+        btnKdvExportExcel.setText(bundle.getString("kdv.exportExcel"));
+        btnKdvPrint.setText(bundle.getString("kdv.print"));
+        btnKdvMail.setText(bundle.getString("kdv.mail"));
+
+
+        userTitleLabel.setText(bundle.getString("user.title"));
+        searchField.setPromptText(bundle.getString("user.searchPrompt"));
+        filterRoleComboBox.setPromptText(bundle.getString("user.rolePrompt"));
+        btnAddUser.setText(bundle.getString("user.add"));
+        btnUpdateUser.setText(bundle.getString("user.update"));
+        btnDeleteUser.setText(bundle.getString("user.delete"));
+        btnPrintUser.setText(bundle.getString("user.print"));
+
+        // KDV tablosu başlıkları
+        idColumnKdv.setText(bundle.getString("kdv.id"));
+        amountColumn.setText(bundle.getString("kdv.amount"));
+        kdvRateColumn.setText(bundle.getString("kdv.rate"));
+        kdvAmountColumn.setText(bundle.getString("kdv.amountValue"));
+        totalAmountColumn.setText(bundle.getString("kdv.total"));
+        receiptColumn.setText(bundle.getString("kdv.receipt"));
+        dateColumn.setText(bundle.getString("kdv.date"));
+        descColumn.setText(bundle.getString("kdv.description"));
+
+// Kullanıcı tablosu başlıkları
+        idColumn.setText(bundle.getString("user.id"));
+        usernameColumn.setText(bundle.getString("user.username"));
+        emailColumn.setText(bundle.getString("user.email"));
+        passwordColumn.setText(bundle.getString("user.password"));
+        roleColumn.setText(bundle.getString("user.role"));
+
+        footerLabel.setText(bundle.getString("footer"));
+
+
+    }
 
 
     @FXML
-    private void languageTheme(ActionEvent event) {
-        // Uygulamanın dili değiştirilecek (TR/EN vs.)
+    private void switchToTurkish() {
+        currentLocale = new Locale("tr");
+        loadLanguage(currentLocale);
     }
+
+    @FXML
+    private void switchToEnglish() {
+        currentLocale = new Locale("en");
+        loadLanguage(currentLocale);
+    }
+    @FXML
+    private void switchToDeutch(){
+        currentLocale = new Locale("al");
+        loadLanguage(currentLocale);
+    }
+
 
     @FXML
     private void showNotifications(ActionEvent event) {

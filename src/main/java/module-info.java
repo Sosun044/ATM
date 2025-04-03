@@ -1,4 +1,8 @@
+// Gerekli izinleri verdiğimiz yer
 module com.muhammedsosun.atm {
+
+    // JavaFX'in temel bileşenlerini kullanmak için gerekli modüller
+    // JavaFX kontrol bileşenlerini (Button, Label, TextField vb.) kullanabilmek için gereklidir.
     requires javafx.controls;
 
     // JavaFX FXML dosyalarını (FXML UI tasarımları) yükleyebilmek için gereklidir.
@@ -38,10 +42,15 @@ module com.muhammedsosun.atm {
     requires org.apache.pdfbox;
     requires java.desktop;
     requires java.mail;
+    //requires eu.hansolo.tilesfx;
 
+    // #######################################################################################
+    // Paket Erişimlerine İzin vermek
+    // `opens` ifadesi, bir paketin runtime'da (çalışma zamanında) refleksiyon (reflection) kullanılarak erişilebilir olmasını sağlar.
+    // Ana paket (Root package) açılıyor, böylece FXML dosyalarından erişilebilir.
     opens com.muhammedsosun.atm to javafx.fxml;
 
-
+    // DTO (Data Transfer Object) paketinin içeriği, JavaFX bileşenleri ve Lombok tarafından erişilebilir olmalıdır.
     opens com.muhammedsosun.atm.dto to javafx.base, lombok;
 
     // Controller sınıfları FXML tarafından kullanılacağı için açılması gerekiyor.
@@ -53,40 +62,24 @@ module com.muhammedsosun.atm {
     // Veritabanı bağlantısı sağlayan sınıfların da SQL modülüne açık olması gerekiyor.
     opens com.muhammedsosun.atm.database to java.sql;
 
+    // #####################################################################
+    // Paket dışa aktarmak
+    // `exports` ifadesi, paketin diğer modüller tarafından erişilebilir olmasını sağlar.
+
     // DAO sınıflarını dışarıya açıyoruz. Böylece başka modüller veritabanı işlemlerini çağırabilir.
     exports com.muhammedsosun.atm.dao;
 
     // // Veritabanı bağlantı paketini dış dünyaya açıyoruz. Diğer modüller DB bağlantısını kullanabilir.
     exports com.muhammedsosun.atm.database;
 
+    // Ana paketi dış dünyaya açıyoruz. Diğer modüller bu paketin içeriğini kullanabilir.
     exports com.muhammedsosun.atm;
     opens com.muhammedsosun.atm.utils to javafx.base, lombok;
 }
+
+//Default
 /*
-
-    // Controller sınıfları FXML tarafından kullanılacağı için açılması gerekiyor.
-    opens com.muhammedsosun.atm.controller to javafx.fxml;
-
-    // DAO (Data Access Object) sınıfları, SQL bağlantısı kullandığı için açılıyor.
-    opens com.muhammedsosun.atm.dao to java.sql;
-
-    // Veritabanı bağlantısı sağlayan sınıfların da SQL modülüne açık olması gerekiyor.
-    opens com.muhammedsosun.atm.database to java.sql;
-
-
-
- // #####################################################################
-    // DAO sınıflarını dışarıya açıyoruz. Böylece başka modüller veritabanı işlemlerini çağırabilir.
-    exports com.muhammedsosun.atm.dao;
-
-    // // Veritabanı bağlantı paketini dış dünyaya açıyoruz. Diğer modüller DB bağlantısını kullanabilir.
-    exports com.muhammedsosun.atm.database;
-}*/
-
-
-
-/*Default*/
-/*module com.muhammedsosun.atm {
+module com.muhammedsosun.atm {
         requires javafx.controls;
         requires javafx.fxml;
         //requires javafx.web;
@@ -103,4 +96,6 @@ module com.muhammedsosun.atm {
 
         opens com.muhammedsosun.atm to javafx.fxml;
         exports com.muhammedsosun.atm;
-        }*/
+        }
+*/
+

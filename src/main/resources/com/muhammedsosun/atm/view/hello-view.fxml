@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.muhammedsosun.atm.HelloController">
     <padding>
@@ -12,5 +13,16 @@
     </padding>
 
     <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
+
+    <!-- <Button text="Hello!" onAction="#onHelloButtonClick"/>simdilik yoruma çektim-->
+
+    <!-- Bu label dil destekli olarak değişecek -->
+    <Label fx:id="greetingLabel"/>
+
+    <!-- Bu buton da dil destekli olacak -->
+    <Button fx:id="exitButton"/>
+
+    <!-- Dil seçimi için ComboBox -->
+    <ComboBox fx:id="languageComboBox" onAction="#onLanguageChange"/>
 </VBox>
+

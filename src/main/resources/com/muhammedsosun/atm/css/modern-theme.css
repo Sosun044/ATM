@@ -1,0 +1,72 @@
+/* gold-theme.css */
+
+.root {
+    -fx-base: #2c3e50;
+    -fx-background-color: #2c3e50;
+}
+
+.label {
+    -fx-text-fill: #f1c40f; /* Altın Sarısı */
+}
+
+.text-field, .combo-box {
+    -fx-background-color: #34495e; /* Koyu mavi tonlarında */
+    -fx-text-fill: #f1c40f; /* Altın Sarısı */
+    -fx-border-color: #f39c12; /* Altın sarısı */
+}
+
+.table-view {
+    -fx-background-color: #34495e;
+    -fx-table-cell-border-color: transparent;
+    -fx-border-color: #f39c12; /* Altın sarısı */
+    -fx-text-fill: #f1c40f; /* Altın Sarısı */
+}
+
+.table-column-header {
+    -fx-background-color: #f39c12; /* Altın sarısı */
+    -fx-text-fill: #2c3e50; /* Koyu mavi */
+}
+
+.button {
+    -fx-background-radius: 8;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-color: #f39c12; /* Altın sarısı */
+}
+
+.button:hover {
+    -fx-opacity: 0.85;
+    -fx-background-color: #e67e22; /* Daha koyu altın */
+}
+
+.menu-bar {
+    -fx-background-color: #34495e; /* Koyu mavi tonlarında */
+}
+
+.menu, .menu-item {
+    -fx-text-fill: #f1c40f; /* Altın Sarısı */
+    -fx-background-color: #2c3e50; /* Koyu mavi tonlarında */
+}
+
+.split-pane {
+    -fx-background-color: #2c3e50;
+}
+
+.hbox, .vbox {
+    -fx-background-color: #2c3e50;
+}
+
+/* Özel stiller (class varsa) */
+.panel-title {
+    -fx-font-size: 18px;
+    -fx-text-fill: #f1c40f; /* Altın Sarısı */
+    -fx-font-weight: bold;
+}
+
+.footer {
+    -fx-background-color: #1c2833;
+    -fx-text-fill: #f39c12; /* Altın Sarısı */
+    -fx-font-size: 13px;
+    -fx-padding: 12;
+}
+
