@@ -32,6 +32,17 @@ public class SingletonPropertiesDBConnection {
             throw new RuntimeException("❌ Veritabanı bağlantısı başarısız!");
         }
     }
+    public void backupDatabase(String backupPath) {
+        String backupSQL = "SCRIPT TO '" + backupPath + "'";
+
+        try (Statement stmt = connection.createStatement()) {
+            stmt.execute(backupSQL);
+            System.out.println("✅ Veritabanı yedeği başarıyla oluşturuldu: " + backupPath);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("❌ Veritabanı yedeği oluşturulurken hata oluştu.");
+        }
+    }
 
     // H2DB
     // H2 Web Konsolunu başlatmak için
@@ -40,6 +51,7 @@ public class SingletonPropertiesDBConnection {
             Server server = Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082").start();
             System.out.println("H2 Web Console is running at: http://localhost:8082");
         } catch (SQLException e) {
+            System.err.println("❌ H2 Web Console başlatılamadı. Port kullanımda olabilir: 8082");
             e.printStackTrace();
         }
     }
@@ -53,6 +65,8 @@ public class SingletonPropertiesDBConnection {
             URL = properties.getProperty("db.url", "jdbc:h2:./h2db/user_management");
             USERNAME = properties.getProperty("db.username", "sa");
             PASSWORD = properties.getProperty("db.password", "");
+
+
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("❌ Veritabanı yapılandırması yüklenemedi!");

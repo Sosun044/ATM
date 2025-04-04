@@ -27,7 +27,7 @@
                 <Button fx:id="notificationButton" text="🔔 Bildirimler" onAction="#showNotifications" style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-background-radius: 8;" />
                 <Button fx:id="backupButton" text="💾 Yedekle" onAction="#backupData" style="-fx-background-color: #16a085; -fx-text-fill: white; -fx-background-radius: 8;" />
                 <Button fx:id="restoreButton" text="🔁 Geri Yükle" onAction="#refreshTable" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-background-radius: 8;" />
-
+                <Button fx:id="restoreButtonOnDatabase" text="BuckUpVerileriÇek" onAction="#restoreData" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 8;" />
                 <Pane HBox.hgrow="ALWAYS" />
                 <Button fx:id="notebookButton" text="🪪 Not Defteri" onAction="#notebook" style="-fx-background-color: #139c12; -fx-text-fill: white; -fx-background-radius: 8;" />
                 <Pane HBox.hgrow="ALWAYS" />

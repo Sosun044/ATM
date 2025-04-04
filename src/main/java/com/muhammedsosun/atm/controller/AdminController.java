@@ -1,11 +1,12 @@
 package com.muhammedsosun.atm.controller;
-import com.muhammedsosun.atm.dao.UserDAO;
-import com.muhammedsosun.atm.dao.KdvDAO;
-import com.muhammedsosun.atm.dto.KdvDTO;
-import com.muhammedsosun.atm.utils.ERole;
-import com.muhammedsosun.atm.dto.UserDTO;
-import com.muhammedsosun.atm.utils.FXMLPath;
 
+import com.muhammedsosun.atm.dao.KdvDAO;
+import com.muhammedsosun.atm.dao.UserDAO;
+import com.muhammedsosun.atm.database.SingletonPropertiesDBConnection;
+import com.muhammedsosun.atm.dto.KdvDTO;
+import com.muhammedsosun.atm.dto.UserDTO;
+import com.muhammedsosun.atm.utils.ERole;
+import com.muhammedsosun.atm.utils.FXMLPath;
 import com.muhammedsosun.atm.utils.SessionManager;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -26,6 +27,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -48,11 +50,13 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.Date;
 
 public class AdminController implements Initializable {
 
@@ -1098,6 +1102,8 @@ public class AdminController implements Initializable {
     @FXML
     private Label headerLabel;
     @FXML
+    private Button restoreButtonOnDatabase;
+    @FXML
     private Button modeButton;
     @FXML
     private Button notificationButton;
@@ -1178,6 +1184,7 @@ public class AdminController implements Initializable {
         bundle = ResourceBundle.getBundle("com.muhammedsosun.atm.lang",locale);
 
         headerLabel.setText(bundle.getString("header.panel"));
+        restoreButtonOnDatabase.setText(bundle.getString("restore.panel"));
         modeButton.setText(bundle.getString("theme"));
         languageMenuButton.setText(bundle.getString("language")); // MenuButton için
         notificationButton.setText(bundle.getString("notifications"));
@@ -1331,12 +1338,59 @@ public class AdminController implements Initializable {
     @FXML
     private void backupData(ActionEvent event) {
         // Veritabanı yedekleme işlemleri burada yapılacak
+
+        String backupPath = "backup/h2db_backup.sql";  // You can change the path as needed
+
+        SingletonPropertiesDBConnection dbConnection = SingletonPropertiesDBConnection.getInstance();
+
+        dbConnection.backupDatabase(backupPath);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        NotificationController.addNotification("✅Veritabanı başarıyla yedeklendi...  " + formatter.format(new Date()));
+
+
+        showAlert("Başarılı", "✅Veritabanı yedeği başarıyla oluşturuldu!", Alert.AlertType.INFORMATION);
+
+
     }
 
     @FXML
     private void restoreData(ActionEvent event) {
-        // Daha önce alınmış bir yedek dosyadan veri geri yüklenecek
+        // Dosya seçici ile yedek dosyasını seçme
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SQL Files", "*.sql"));
+        File file = fileChooser.showOpenDialog(null);
+
+        if (file != null) {
+            String backupFilePath = file.getAbsolutePath(); // Seçilen dosyanın tam yolu
+            String restoreSQL = "RUNSCRIPT FROM '" + backupFilePath.replace("\\", "\\\\") + "'";
+            SingletonPropertiesDBConnection dbConnection = SingletonPropertiesDBConnection.getInstance();
+            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+
+            try (Statement stmt = dbConnection.getConnection().createStatement()) {
+                // SQL komutunu çalıştırarak yedek dosyasındaki verileri geri yükle
+                stmt.execute("DROP TABLE IF EXISTS KDV_TABLE");
+                stmt.execute("DROP TABLE IF EXISTS USERTABLE");
+                stmt.execute(restoreSQL);
+                showAlert("Başarılı", "✅ Veritabanı başarıyla geri yüklendi!", Alert.AlertType.INFORMATION);
+                NotificationController.addNotification("Veritabanı yedeği başarıyla yüklendi  " + formatter.format(new Date()));
+            } catch (SQLException e) {
+                e.printStackTrace();
+                showAlert("Başarısız", "❌ Veritabanı geri yüklenirken hata oluştu: " + e.getMessage(), Alert.AlertType.ERROR);
+            }
+        } else {
+            showAlert("İptal", "❌ Dosya seçilmedi.", Alert.AlertType.WARNING);
+        }
     }
+
+    public boolean isTableExists(String tableName) throws SQLException {
+        SingletonPropertiesDBConnection dbConnection = SingletonPropertiesDBConnection.getInstance();
+        try (Connection connection = dbConnection.getConnection();
+             ResultSet rs = connection.getMetaData().getTables(null, null, tableName.toUpperCase(), null)) {
+            return rs.next();
+        }
+    }
+
+
 
 
     @FXML
