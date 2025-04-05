@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox
+
+        xmlns:fx="http://javafx.com/fxml"
+        fx:controller="com.muhammedsosun.atm.controller.NoteController"
+>
+
+    <TextField fx:id="titleField" promptText="Başlık"/>
+    <TextArea fx:id="contentArea" promptText="Not içeriği" prefHeight="150"/>
+
+    <Button fx:id="btnSaveNote" text="Kaydet" onAction="#saveNote"
+            style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 8;"/>
+
+    <CheckBox fx:id="pinnedCheckBox" text="Not"/>
+
+</VBox>

@@ -1,9 +1,11 @@
 package com.muhammedsosun.atm.controller;
 
 import com.muhammedsosun.atm.dao.KdvDAO;
+import com.muhammedsosun.atm.dao.NotebookDAO;
 import com.muhammedsosun.atm.dao.UserDAO;
 import com.muhammedsosun.atm.database.SingletonPropertiesDBConnection;
 import com.muhammedsosun.atm.dto.KdvDTO;
+import com.muhammedsosun.atm.dto.NotebookDTO;
 import com.muhammedsosun.atm.dto.UserDTO;
 import com.muhammedsosun.atm.utils.ERole;
 import com.muhammedsosun.atm.utils.FXMLPath;
@@ -28,6 +30,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -43,9 +46,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -1390,12 +1391,48 @@ public class AdminController implements Initializable {
         }
     }
 
-
+    private NotebookDAO notebookDAO = new NotebookDAO();
 
 
     @FXML
     private void notebook(ActionEvent event) {
-        // Daha önce alınmış bir yedek dosyadan veri geri yüklenecek
+        try {
+            System.out.println(getClass().getResource("/com/muhammedsosun/atm/view/note.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/muhammedsosun/atm/view/note.fxml"));
+            Parent root = loader.load();
+
+            // Controller erişimi
+            NoteController controller = loader.getController();
+
+            // currentUser kontrolü
+            UserDTO currentUser = SessionManager.getCurrentUser();
+            if (currentUser == null) {
+                System.err.println("currentUser null! setUser(...) çağrılmamış olabilir.");
+                return;
+            }
+
+            Stage stage = new Stage();
+            stage.setTitle("Yeni Not Ekle");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+            NotebookDTO createdNote = controller.getCreatedNote();
+            controller.setCreatedNote(createdNote);
+
+            if (createdNote != null) {
+                System.out.println("Yeni not oluşturuldu:");
+                NotificationController.addNotification("Yeni not oluşturuldu:");
+                createdNote.setUserDTO(currentUser);
+                notebookDAO.save(createdNote);
+                notebookDAO.saveToFile(createdNote);
+                System.out.println(createdNote.toString());
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
 }

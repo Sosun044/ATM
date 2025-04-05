@@ -18,5 +18,25 @@ public class NotebookDTO {
     private UserDTO userDTO; //Composition
 
     // Constructorlar
+
+
+
+
+
     // Getter ve Setter'lar
+
+
+    @Override
+    public String toString() {
+        return "NotebookDTO{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", createdDate=" + createdDate +
+                ", updatedDate=" + updatedDate +
+                ", category='" + category + '\'' +
+                ", pinned=" + pinned +
+                ", userDTO=" + userDTO +
+                '}';
+    }
 }
