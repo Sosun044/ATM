@@ -1397,7 +1397,6 @@ public class AdminController implements Initializable {
     @FXML
     private void notebook(ActionEvent event) {
         try {
-            System.out.println(getClass().getResource("/com/muhammedsosun/atm/view/note.fxml"));
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/muhammedsosun/atm/view/note.fxml"));
             Parent root = loader.load();
 
@@ -1422,6 +1421,7 @@ public class AdminController implements Initializable {
 
             if (createdNote != null) {
                 System.out.println("Yeni not oluşturuldu:");
+                MyNotesController.addNotes(createdNote.getTitle() + createdNote.getContent());
                 NotificationController.addNotification("Yeni not oluşturuldu:");
                 createdNote.setUserDTO(currentUser);
                 notebookDAO.save(createdNote);
@@ -1433,6 +1433,20 @@ public class AdminController implements Initializable {
             e.printStackTrace();
         }
     }
+    public void myNotes(ActionEvent event){
+        // Bildirimleri gösteren popup veya panel açılacak
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/muhammedsosun/atm/view/myNotes.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Notlarım");
+            stage.setScene(new Scene(root));
+            stage.show();
 
 
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

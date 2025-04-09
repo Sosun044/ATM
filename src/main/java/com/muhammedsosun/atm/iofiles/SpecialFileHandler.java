@@ -55,17 +55,17 @@ public class SpecialFileHandler {
         }
     }
 
-    public List<String> readFile() {
-        File file = new File(filePath);
+    public List<String> readFile(String filePath) {
+        File file = new File(this.filePath);
         List<String> fileLines = new ArrayList<>();
 
         if (!file.exists()) {
             //logger.warning("⚠️ Okunacak dosya bulunamadı: " + filePath);
-            System.out.println(SpecialColor.RED+"⚠️ Okunacak dosya bulunamadı: " + filePath+SpecialColor.RESET);
+            System.out.println(SpecialColor.RED+"⚠️ Okunacak dosya bulunamadı: " + this.filePath +SpecialColor.RESET);
             return fileLines;
         }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.filePath))) {
             String line;
             //logger.info("📖 Dosya içeriği okunuyor...");
             System.out.println(SpecialColor.BLUE+"📖 Dosya içeriği okunuyor... " +SpecialColor.RESET);
@@ -74,7 +74,7 @@ public class SpecialFileHandler {
             }
         } catch (IOException e) {
             //logger.log(Level.SEVERE, "❌ Dosya okuma hatası: " + e.getMessage(), e);
-            System.out.println(SpecialColor.RED+"❌ Dosya okuma hatası " + filePath+SpecialColor.RESET);
+            System.out.println(SpecialColor.RED+"❌ Dosya okuma hatası " + this.filePath +SpecialColor.RESET);
         }
 
         if (fileLines.isEmpty()) {

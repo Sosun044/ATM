@@ -3,6 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <VBox
 
         xmlns:fx="http://javafx.com/fxml"
@@ -10,7 +12,19 @@
 >
 
     <TextField fx:id="titleField" promptText="Başlık"/>
+    <ComboBox fx:id="categoryComboBox" promptText="Kategori Seçiniz">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="Kişisel"/>
+                <String fx:value="İş"/>
+                <String fx:value="Okul"/>
+                <String fx:id=""/>
+            </FXCollections>
+        </items>
+    </ComboBox>
+
     <TextArea fx:id="contentArea" promptText="Not içeriği" prefHeight="150"/>
+
 
     <Button fx:id="btnSaveNote" text="Kaydet" onAction="#saveNote"
             style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 8;"/>

@@ -1,8 +1,9 @@
 package com.muhammedsosun.atm.dao;
 
-import com.muhammedsosun.atm.database.SingletonPropertiesDBConnection;
 import com.muhammedsosun.atm.dto.NotebookDTO;
-import com.muhammedsosun.atm.dto.UserDTO;
+import com.muhammedsosun.atm.iofiles.SpecialFileHandler;
+
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +14,15 @@ public class NotebookDAO {
     // Geçici bellek listesi
     private static final List<NotebookDTO> notebookList = new ArrayList<>();
     private static Long idCounter = 1L;
+    private SpecialFileHandler fileHandler;
+    private static final String FILE_PATH = "notlar.txt";
+
+
+    public NotebookDAO(){
+        this.fileHandler = new SpecialFileHandler();
+        this.fileHandler.setFilePath(FILE_PATH);
+        this.fileHandler.createFileIfNotExists();
+    }
 
     private Long generatedId() {
         return idCounter++;
@@ -28,8 +38,8 @@ public class NotebookDAO {
 
     // Dosyaya yaz
     public void saveToFile(NotebookDTO notebook) {
-        try (FileWriter fw = new FileWriter("notlar.txt", true)) {
-            fw.write(notebook.toString() + "\n");
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("notlar.txt",true))) {
+            bufferedWriter.write(notebook.toString() + "\n");
             System.out.println("Dosyaya yazıldı: " + notebook.getTitle());
         } catch (IOException e) {
             e.printStackTrace();

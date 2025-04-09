@@ -30,6 +30,8 @@
                 <Button fx:id="restoreButtonOnDatabase" text="BuckUpVerileriÇek" onAction="#restoreData" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 8;" />
                 <Pane HBox.hgrow="ALWAYS" />
                 <Button fx:id="notebookButton" text="🪪 Not Defteri" onAction="#notebook" style="-fx-background-color: #139c12; -fx-text-fill: white; -fx-background-radius: 8;" />
+                <Button fx:id="MyNotesButton" text="📒 notlarım" onAction="#myNotes" style="-fx-background-color: #139c12; -fx-text-fill: white; -fx-background-radius: 8;" />
+
                 <Pane HBox.hgrow="ALWAYS" />
                 <Button fx:id="profileButton" text="👤 Profil" onAction="#showProfile" style="-fx-background-color: #8e44ad; -fx-text-fill: white; -fx-background-radius: 8;" />
 
