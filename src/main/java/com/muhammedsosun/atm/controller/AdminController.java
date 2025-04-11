@@ -14,6 +14,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -134,7 +135,12 @@ public class AdminController implements Initializable {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-        roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
+        passwordColumn.setCellValueFactory(new PropertyValueFactory<>("password"));
+        roleColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getRole().getDescription())
+        );
+
+
 
         // Rol filtreleme için ComboBox
         filterRoleComboBox.getItems().add(null); // boş seçenek: tüm roller
@@ -153,6 +159,8 @@ public class AdminController implements Initializable {
                 setText((empty || password == null) ? null : "******");
             }
         });
+        userTable.setStyle("-fx-text-fill: black; -fx-font-size: 14px;");
+
 
         // Sayfa Açılır açılmaz geliyor
         //roleComboBox.setItems(FXCollections.observableArrayList("USER", "ADMIN", "MODERATOR"));
@@ -229,6 +237,12 @@ public class AdminController implements Initializable {
         ObservableList<UserDTO> observableList = FXCollections.observableArrayList(userDTOList);
         userTable.setItems(observableList);
         showAlert("Bilgi", "Tablo başarıyla yenilendi!", Alert.AlertType.INFORMATION);
+        System.out.println("Kullanıcı sayısı: " + userDTOList.size());
+        for (UserDTO user : userDTOList) {
+            System.out.println(">> Kullanıcı: " + user.getUsername() + " - " + user.getRole().getDescription());
+        }
+
+
     }
 
     private void showAlert(String title, String message, Alert.AlertType type) {
