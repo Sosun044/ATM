@@ -14,7 +14,6 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -47,18 +46,22 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.Date;
 
 public class AdminController implements Initializable {
 
@@ -135,19 +138,15 @@ public class AdminController implements Initializable {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-        passwordColumn.setCellValueFactory(new PropertyValueFactory<>("password"));
-        roleColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getRole().getDescription())
-        );
+        roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
 
 
 
         // Rol filtreleme için ComboBox
-        filterRoleComboBox.getItems().add(null); // boş seçenek: tüm roller
+        filterRoleComboBox.getItems().add(null);
         filterRoleComboBox.getItems().addAll(ERole.values());
-        filterRoleComboBox.setValue(null); // başlangıçta tüm roller
+        filterRoleComboBox.setValue(null);
 
-        // Arama kutusu dinleme
         searchField.textProperty().addListener((observable, oldVal, newVal) -> applyFilters());
         filterRoleComboBox.valueProperty().addListener((obs, oldVal, newVal) -> applyFilters());
 
