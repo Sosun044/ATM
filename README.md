@@ -1,58 +1,53 @@
-JavaFX ATM Projesi
+# Kullanıcı ve KDV Yönetim Sistemi
 
-Bu proje, JavaFX kullanarak geliştirilmiş bir ATM simülasyonudur. Kullanıcıların giriş yapmasını, para işlemleri gerçekleştirmesini ve KDV hesaplamalarını yapmasını sağlar.
+Bu proje, JavaFX kullanılarak geliştirilen bir **Kullanıcı ve KDV Yönetim Paneli** uygulamasıdır. Proje içerisinde kullanıcı kaydı, giriş yapma, KDV hesaplama, kullanıcı yönetimi ve veri aktarımı gibi birçok özellik yer almaktadır.
 
-Özellikler (Features)
+## 🔧 Kullanılan Teknolojiler
 
-Kullanıcı kaydı ve giriş sistemi (User Registration & Login System)
+- JavaFX (Arayüz)
+- H2 Veritabanı (Yerel veritabanı)
+- MVC (Model-View-Controller) mimarisi
+- Java 17+ ile uyumlu
 
-H2 Database ile veritabanı yönetimi (H2 Database Management)
+## 🧾 Özellikler
 
-Kullanıcı ve KDV işlemleri için DAO katmanı (DAO Layer for User & KDV Operations)
+- **Kullanıcı Girişi ve Kayıt Olma**  
+  Kayıtlı kullanıcı değilse kayıt olma, kayıtlıysa kullanıcı adı ve şifre ile giriş yapma ekranı.
+  
+- **Admin Paneli**  
+  - Kullanıcı yönetimi (Ekle, Güncelle, Sil)
+  - Rol bazlı filtreleme
+  - KDV hesaplama işlemleri (Tutar, oran, toplam)
+  - Verileri TXT, PDF, Excel formatlarında dışa aktarma
+  - Karanlık mod desteği
+  - Yedekleme ve geri yükleme
 
-Şifre güvenliği için BCrypt kullanımı (Password Security with BCrypt)
+## 📸 Ekran Görüntüleri
 
-JavaFX tabanlı görsel arayüz (JavaFX-based GUI)
-
-Kullanıcı rollerine göre yetkilendirme (Role-based Authorization)
-
-Kullanılan Teknolojiler (Technologies Used)
-
-Java 17+
-
-JavaFX (FXML ile arayüz tasarımı)
-
-H2 Database (Hafif veritabanı yönetimi)
-
-BCrypt (Şifre güvenliği için)
-
-Maven (Bağımlılık yönetimi)
-
-Singleton Pattern (Veritabanı bağlantısı yönetimi için)
-
-Kurulum (Installation)
-
-Projeyi klonlayın:
-
-git clone https://github.com/muhammedsosun/atm-javafx.git
-
-Maven bağımlılıklarını yükleyin:
-
-mvn clean install
-
-Uygulamayı çalıştırın:
-
-mvn javafx:run
-
-Veritabanı Yapılandırması (Database Configuration)
-
-Proje H2 Database kullanmaktadır.
-
-h2db_data.sql dosyası, veritabanının başlangıç verilerini içerir.
-
-Varsayılan bağlantı bilgileri:
-
-JDBC URL: jdbc:h2:./atm_db
+### Kullanıcı ve KDV Yönetimi Ekranı:
+(https://github.com/Sosun044/ATM/blob/master/src/main/resources/com/muhammedsosun/atm/images/AdminPanel.png)
+resources altında images içinde ekran görüntüsüne ulaşabilirsiniz
 
 
-Veritabanı dosyaları database klasöründe bulunmaktadır.
+## 🚀 Projeyi Çalıştırma
+
+1. Projeyi indirin veya klonlayın.
+2. `Main.java` dosyasını çalıştırın.
+3. Uygulama açıldığında, giriş ekranı sizi karşılayacaktır.
+4. Giriş yaptıktan sonra admin paneline yönlendirilirsiniz.
+
+## 📁 Çıktı Dosyaları
+
+Bu proje ile birlikte aşağıdaki çıktı dosyaları oluşturulabilir:
+- `PDF`
+- `Excel`
+- `TXT`
+
+## 📦 Dağıtım
+
+Projenin çalışabilir `.jar` versiyonu `/out/artifacts` dizinindedir.
+
+## 🧑‍💻 Geliştirici
+
+> **Muhammed Sosun**  
+
