@@ -8,6 +8,8 @@ Bu proje, JavaFX kullanılarak geliştirilen bir **Kullanıcı ve KDV Yönetim P
 - H2 Veritabanı (Yerel veritabanı)
 - MVC (Model-View-Controller) mimarisi
 - Java 17+ ile uyumlu
+- CSS
+- SQL
 
 ## 🧾 Özellikler
 
